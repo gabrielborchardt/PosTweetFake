@@ -20,9 +20,21 @@ export default class NewTweet {
     card () {
         return `
         <form id='form'>
-            Nome: <input type="text" id="nome">
-            Mensagem: <input type="text" id="mensagem">
-            <input type="submit" value="Enviar">
+            <div class="field">
+                <div class="control">
+                    <input type="text" class="input" placeholder="Escreva o seu nome" id="nome">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <textarea class="textarea" placeholder="Escreva o seu tweet" cols="40" rows="5" id="mensagem"></textarea>
+                </div>
+            </div>
+            <div class="field is-pulled-right">
+                <div class="control">
+                    <button type="submit" class="button is-dark">Enviar</button>
+                </div>
+            </div>
         </form>
         `
     }
@@ -30,13 +42,17 @@ export default class NewTweet {
     submit (form) {
         form.preventDefault()
 
-        const name = document.getElementById("nome").value
-        const text = document.getElementById("mensagem").value
-        const tweet = new Tweet({name, text})
+        const nome = document.getElementById("nome")
+        const mensagem = document.getElementById("mensagem")
+        
+        const tweet = new Tweet({name: nome.value, text: mensagem.value})
             
-        this.validate(name, text)
+        this.validate(nome.value, mensagem.value)
         .then(()=>{
-            this.containerList.insertBefore(tweet.render(), this.containerList.childNodes[0])
+            this.containerList.insertBefore(tweet.render(), this.containerList.firstChild)
+
+            nome.value = ''
+            mensagem.value = ''
         })
         .catch((err)=>{
             alert(err)
